@@ -12,12 +12,9 @@ const props = defineProps<{
   rows: SizeQtyRow[];
   columnTotals: {
     lenganPendek: number;
-    lengan34: number;
     lenganCustom: number;
-    lengan78: number;
     lenganPanjang: number;
     anakLenganPendek: number;
-    anakLengan34: number;
     anakLenganPanjang: number;
   };
   grandTotal: number;

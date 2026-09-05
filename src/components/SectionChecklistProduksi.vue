@@ -2,10 +2,6 @@
 import type { ChecklistItem } from "../types/order";
 
 defineProps<{ checklist: ChecklistItem[] }>();
-
-function toggle(item: ChecklistItem) {
-  item.done = !item.done;
-}
 </script>
 
 <template>

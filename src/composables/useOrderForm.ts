@@ -98,7 +98,6 @@ export function createOrderForm() {
         lenganCustom: 0,
         lenganPanjang: 0,
         anakLenganPendek: 0,
-        anakLengan34: 0,
         anakLenganPanjang: 0,
       },
     );
@@ -121,7 +120,6 @@ export function createOrderForm() {
       t.lenganCustom +
       t.lenganPanjang +
       t.anakLenganPendek +
-      t.anakLengan34 +
       t.anakLenganPanjang
     );
   });
