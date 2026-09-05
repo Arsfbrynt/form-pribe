@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  background-color: #f3f4f6;
+}
+
+/* Checklist "coret" (struck) state used in Section 6 */
+.checklist-done .checklist-icon-wrap {
+  position: relative;
+}
+.checklist-done .checklist-icon-wrap::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 50%;
+  height: 3px;
+  background-color: #b70112;
+  transform: rotate(-8deg);
+  border-radius: 2px;
+}

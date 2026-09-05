@@ -1,0 +1,30 @@
+/* Table Body Styles */
+.table-row {
+  @apply odd:bg-gray-50;
+}
+
+.td-size-label {
+  @apply px-3 py-1.5 border border-gray-200 font-semibold text-center bg-gray-100;
+}
+
+.td-input-cell {
+  @apply border border-gray-200 p-1;
+}
+
+.input-qty {
+  @apply w-full text-center rounded border border-gray-200 px-1 py-1 text-sm transition-colors;
+  @apply focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500;
+}
+
+.td-row-total {
+  @apply px-3 py-1.5 border border-gray-200 text-center font-semibold bg-gray-50;
+}
+
+/* Table Footer Styles */
+.tfoot-cell {
+  @apply px-3 pr-3.5 !pl-0 border border-gray-200 text-center font-bold bg-gray-100;
+}
+
+.tfoot-grand-total {
+  @apply px-3 py-2 border border-gray-200 text-center font-extrabold bg-brand-50 text-brand-700;
+}
