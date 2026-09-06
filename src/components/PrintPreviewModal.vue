@@ -43,38 +43,45 @@ function displayValue(v: string | number | null | undefined, fallback = "—") {
   return v;
 }
 
-async function handleDownload() {
+async function captureAsImage(): Promise<string | null> {
   const element = document.getElementById("print-area");
-  if (!element) return;
+  if (!element) return null;
 
   await document.fonts.ready;
-  element.classList.add("pdf-export-mode"); // sembunyiin garis sesaat
+  element.classList.add("pdf-export-mode");
 
   try {
-    const filename = `Form-Pesanan-${props.form.noOrder || "PRIBE-STUDIO"}.pdf`;
-
     const canvas = await html2canvas(element, {
       scale: 3,
       useCORS: true,
       logging: false,
       windowWidth: 794,
     });
-
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const imgWidth = 210;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
-    pdf.save(filename);
+    return canvas.toDataURL("image/jpeg", 1.0);
   } finally {
-    element.classList.remove("pdf-export-mode"); // munculin lagi walau ada error
+    element.classList.remove("pdf-export-mode");
   }
+}
+
+async function handleDownload() {
+  const imgData = await captureAsImage();
+  if (!imgData) return;
+
+  const filename = `Form-Pesanan-${props.form.noOrder || "PRIBE-STUDIO"}.pdf`;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+  // ambil dimensi asli gambar buat hitung rasio
+  const img = new Image();
+  img.src = imgData;
+  await new Promise((resolve) => {
+    img.onload = resolve;
+  });
+
+  const imgWidth = 210;
+  const imgHeight = (img.height * imgWidth) / img.width;
+
+  pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+  pdf.save(filename);
 }
 
 watch(
@@ -109,6 +116,50 @@ function resolveValue(
 function isCustomValue(selected: string | null | undefined) {
   return selected === "Lainnya";
 }
+
+async function handlePrint() {
+  const imgData = await captureAsImage();
+  if (!imgData) return;
+
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.right = "0";
+  iframe.style.bottom = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "none";
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow?.document;
+  if (!doc) {
+    document.body.removeChild(iframe);
+    return;
+  }
+
+  doc.open();
+  doc.write(`
+    <html>
+      <head>
+        <style>
+          @page { size: A4; margin: 0; }
+          body { margin: 0; }
+          img { width: 210mm; display: block; }
+        </style>
+      </head>
+      <body>
+        <img src="${imgData}" />
+      </body>
+    </html>
+  `);
+  doc.close();
+
+  iframe.onload = () => {
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
+    // bersihin iframe abis print dialog ditutup (delay dikit biar print dialog sempat kebuka)
+    setTimeout(() => document.body.removeChild(iframe), 1000);
+  };
+}
 </script>
 
 <template>
@@ -118,6 +169,10 @@ function isCustomValue(selected: string | null | undefined) {
       <div class="toolbar no-print">
         <h2 class="toolbar-title">Print Preview — Form Pesanan</h2>
         <div class="toolbar-actions">
+          <button @click="handlePrint" class="btn btn-secondary">
+            <font-awesome-icon icon="print" />
+            Print
+          </button>
           <button @click="handleDownload" class="btn btn-primary">
             <font-awesome-icon icon="file-pdf" />
             Download PDF
@@ -287,7 +342,7 @@ function isCustomValue(selected: string | null | undefined) {
                 <span>3</span> RINCIAN UKURAN &amp; JUMLAH
               </div>
               <div class="size-table-wrapper">
-                <table class="size-input-table">
+                <table class="size-input-table !w-full !min-w-[500px]">
                   <thead>
                     <tr>
                       <th rowspan="2" class="th-main text-xs !p-0">Ukuran</th>
@@ -322,7 +377,12 @@ function isCustomValue(selected: string | null | undefined) {
                       class="table-row"
                     >
                       <td class="td-cell font-semibold">{{ row.size }}</td>
-                      <td v-for="c in cols" :key="c.key" class="td-cell">
+                      <td
+                        v-for="c in cols"
+                        :key="c.key"
+                        class="td-cell"
+                        :class="(row as any)[c.key] && 'font-bold'"
+                      >
                         {{ (row as any)[c.key] || "-" }}
                       </td>
                       <td class="td-cell font-semibold">
@@ -444,7 +504,7 @@ function isCustomValue(selected: string | null | undefined) {
                 />PRIBE STUDIO
               </span>
               <span>
-                <font-awesome-icon icon="phone" /> +62 856-0056-2414 &nbsp;|
+                <font-awesome-icon icon="phone" /> +62 823-2140-7440 &nbsp;|
                 <font-awesome-icon icon="globe" /> pribestudio.com &nbsp;|&nbsp;
                 ONE STOP CLOTHING
               </span>
@@ -506,6 +566,9 @@ function isCustomValue(selected: string | null | undefined) {
 
   &-primary {
     @apply bg-brand-500 hover:bg-brand-600 text-white;
+  }
+  &-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700;
   }
 }
 
@@ -593,14 +656,14 @@ function isCustomValue(selected: string | null | undefined) {
 
   .lbl {
     @apply text-gray-500 align-top py-0.5 pr-2;
-    font-size: 11px;
+    font-size: 12px;
     white-space: nowrap;
     width: 110px; /* Set lebar pasti untuk kolom kiri */
   }
 
   .val {
     @apply py-0.5 text-gray-800 align-top;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.35;
     &.val-custom {
       @apply text-purple-700 font-semibold;
@@ -710,35 +773,6 @@ function isCustomValue(selected: string | null | undefined) {
 
   .footer-title {
     @apply font-extrabold text-xs;
-  }
-}
-
-/* Print Specific Rules */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-
-  #print-area,
-  #print-area * {
-    visibility: visible;
-  }
-
-  #print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 210mm !important;
-    min-height: 297mm !important;
-    margin: 0 !important;
-    padding: 10mm !important;
-    box-shadow: none !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .no-print {
-    display: none !important;
   }
 }
 

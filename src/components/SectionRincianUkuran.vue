@@ -57,7 +57,7 @@ const cols: {
                 <select
                   v-if="c.key == 'lenganCustom'"
                   v-model="form.lenganCustom"
-                  class="input-qty text-[12px] bg-[#82010d] !border-[#82010d]"
+                  class="input-qty text-[12px] bg-[#fbd4d4] !border-[#fbd4d4]"
                 >
                   <option value="3/4">Lengan 3/4</option>
                   <option value="7/8">Lengan 7/8</option>
@@ -142,22 +142,22 @@ const cols: {
 
 /* Table Header Styles */
 .th-main {
-  @apply bg-brand-800 text-white px-3 py-2 border border-brand-900 align-middle;
+  @apply bg-brand-100 text-brand-800 px-3 py-2 border border-brand-900 align-middle;
 }
 
 .th-sub-anak {
-  @apply bg-brand-500 text-white px-3 py-2 border border-brand-900;
+  @apply bg-brand-100 text-brand-800 px-3 py-2 border border-brand-900;
 }
 
 .th-sub {
-  @apply px-2 py-1.5 border text-center font-medium text-xs border-brand-900 text-white;
+  @apply px-2 py-1.5 border text-center font-medium text-xs border-brand-900 text-brand-800 align-middle;
 
   &.is-utama {
-    @apply bg-brand-700;
+    @apply bg-brand-100;
   }
 
   &.is-anak {
-    @apply bg-brand-400;
+    @apply bg-brand-100;
   }
 }
 

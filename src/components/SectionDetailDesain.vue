@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { OrderForm } from "../types/order";
+import { SIZE_SABLON_OPTIONS } from "../types/order";
 
 defineProps<{ form: OrderForm }>();
 </script>
@@ -27,12 +28,15 @@ defineProps<{ form: OrderForm }>();
           <label class="block text-xs font-semibold text-gray-600 mb-1"
             >Ukuran</label
           >
-          <input
+          <select
             v-model="form.detailDesain.sizeFront"
-            type="text"
-            placeholder="mis. 28 x 35 cm"
-            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-          />
+            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+          >
+            <option value="" disabled>Pilih ukuran</option>
+            <option v-for="opt in SIZE_SABLON_OPTIONS" :key="opt" :value="opt">
+              {{ opt }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="p-4 sm:p-5 space-y-4">
@@ -46,12 +50,15 @@ defineProps<{ form: OrderForm }>();
           <label class="block text-xs font-semibold text-gray-600 mb-1"
             >Ukuran</label
           >
-          <input
+          <select
             v-model="form.detailDesain.sizeBack"
-            type="text"
-            placeholder="mis. 28 x 35 cm"
-            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-          />
+            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+          >
+            <option value="" disabled>Pilih ukuran</option>
+            <option v-for="opt in SIZE_SABLON_OPTIONS" :key="opt" :value="opt">
+              {{ opt }}
+            </option>
+          </select>
         </div>
       </div>
     </div>

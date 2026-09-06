@@ -26,7 +26,7 @@ import logoUrl from "../assets/logo-pribe.png";
       >
         <span class="inline-flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-brand-300"></span>
-          0812 3456 7890
+          +62 823-2140-7440
         </span>
         <span class="inline-flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-brand-300"></span>
@@ -34,7 +34,7 @@ import logoUrl from "../assets/logo-pribe.png";
         </span>
         <span class="inline-flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-brand-300"></span>
-          PRIBE STUDIO — Sablon &amp; Konveksi
+          PRIBE STUDIO
         </span>
       </div>
     </div>

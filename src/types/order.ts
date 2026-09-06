@@ -86,8 +86,8 @@ export interface DetailDesainData {
   catatanPesanan: string;
   mockupFile: File | null;
   mockupFileName: string;
-  sizeFront: string;
-  sizeBack: string;
+  sizeFront: SizeSablon | "";
+  sizeBack: SizeSablon | "";
 }
 
 export interface EstimasiProduksiData {
@@ -112,3 +112,6 @@ export interface OrderForm {
   estimasiProduksi: EstimasiProduksiData;
   checklist: ChecklistItem[];
 }
+
+export const SIZE_SABLON_OPTIONS = ["LOGO", "MID", "A5", "A4", "A3"] as const;
+export type SizeSablon = (typeof SIZE_SABLON_OPTIONS)[number];
