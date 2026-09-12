@@ -104,7 +104,7 @@ export interface ChecklistItem {
 
 export interface OrderForm {
   noOrder: string;
-  lenganCustom: string;
+  // lenganCustom: string;
   tanggalOrder: string; // ISO yyyy-mm-dd
   customer: CustomerData;
   detailPesanan: DetailPesananData;
