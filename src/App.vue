@@ -15,8 +15,18 @@ import AppFooter from "./components/AppFooter.vue";
 import PrintPreviewModal from "./components/PrintPreviewModal.vue";
 import SectionMockupUpload from "./components/SectionMockupUpload.vue";
 
-const { form, columnTotals, rowTotal, grandTotal, estimasiSelesai } =
-  createOrderForm();
+const {
+  form,
+  rowTotal,
+  grandTotal,
+  columnTotalsFor,
+  addRincianGroup,
+  removeRincianGroup,
+  estimasiSelesai,
+  MAX_RINCIAN_GROUPS,
+  noOrderDisplay,
+} = createOrderForm();
+
 const { progress, isDone, preload } = useAssetPreloader([logoUrl], 1500);
 const previewOpen = ref(false);
 onMounted(() => {
@@ -41,13 +51,14 @@ onMounted(() => {
           <SectionDetailPesanan :form="form" />
         </div>
 
-        <!-- Section 3 (full width) -->
+        <!-- Section 3 (full width) — sekarang bisa 1-2 tabel -->
         <SectionRincianUkuran
           :form="form"
-          :rows="form.rincianUkuran"
-          :column-totals="columnTotals"
-          :grand-total="grandTotal"
           :row-total="rowTotal"
+          :column-totals-for="columnTotalsFor"
+          :add-group="addRincianGroup"
+          :remove-group="removeRincianGroup"
+          :max-groups="MAX_RINCIAN_GROUPS"
         />
 
         <!-- Section 4 & 5 -->
@@ -57,10 +68,6 @@ onMounted(() => {
           </div>
           <div class="md:col-span-6 flex flex-col gap-6">
             <SectionDetailDesain :form="form" />
-            <!-- <SectionEstimasiProduksi
-              :form="form"
-              :estimasi-selesai="estimasiSelesai"
-            /> -->
           </div>
         </div>
 
@@ -74,11 +81,11 @@ onMounted(() => {
     <PrintPreviewModal
       :open="previewOpen"
       :form="form"
-      :column-totals="columnTotals"
-      :grand-total="grandTotal"
       :row-total="rowTotal"
-      :rows="form.rincianUkuran"
+      :column-totals-for="columnTotalsFor"
+      :grand-total="grandTotal"
       :estimasi-selesai="estimasiSelesai"
+      :no-order-display="noOrderDisplay"
       @close="previewOpen = false"
     />
   </div>

@@ -25,14 +25,14 @@ const props = defineProps<{ form: OrderForm }>();
     <div class="p-4 sm:p-5 space-y-4">
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1"
-          >Model Kaos</label
+          >Model</label
         >
         <div class="flex gap-2">
           <select
             v-model="form.detailPesanan.modelKaos"
             class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
           >
-            <option value="" disabled>Pilih model kaos</option>
+            <option value="" disabled>Pilih model</option>
             <option v-for="opt in MODEL_KAOS_OPTIONS" :key="opt" :value="opt">
               {{ opt }}
             </option>
@@ -41,7 +41,21 @@ const props = defineProps<{ form: OrderForm }>();
             v-if="form.detailPesanan.modelKaos === 'Lainnya'"
             v-model="form.detailPesanan.modelKaosLainnya"
             type="text"
-            placeholder="Tulis model kaos"
+            placeholder="Tulis model"
+            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1"
+          >Keterangan
+        </label>
+        <div class="flex gap-2">
+          <input
+            v-model="form.detailPesanan.keterangan"
+            type="text"
+            placeholder="Keterangan"
             class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
           />
         </div>
@@ -73,7 +87,7 @@ const props = defineProps<{ form: OrderForm }>();
 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1"
-          >Warna Kaos</label
+          >Warna Bahan</label
         >
         <input
           v-model="form.detailPesanan.warnaKaos"

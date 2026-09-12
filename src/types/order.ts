@@ -73,6 +73,7 @@ export interface DetailPesananData {
   jenisBahan: TypeBahan | "";
   jenisBahanLainnya: string;
   warnaKaos: string;
+  keterangan: string;
   jenisSablon: JenisSablon | "";
   jenisSablonLainnya: string;
   jumlahWarnaSablon: number | null;
@@ -107,7 +108,7 @@ export interface OrderForm {
   tanggalOrder: string; // ISO yyyy-mm-dd
   customer: CustomerData;
   detailPesanan: DetailPesananData;
-  rincianUkuran: SizeQtyRow[];
+  rincianUkuran: RincianUkuranGroup[];
   detailDesain: DetailDesainData;
   estimasiProduksi: EstimasiProduksiData;
   checklist: ChecklistItem[];
@@ -115,3 +116,10 @@ export interface OrderForm {
 
 export const SIZE_SABLON_OPTIONS = ["LOGO", "MID", "A5", "A4", "A3"] as const;
 export type SizeSablon = (typeof SIZE_SABLON_OPTIONS)[number];
+
+export interface RincianUkuranGroup {
+  id: string;
+  warnaKaos: string;
+  lenganCustom: string;
+  rows: SizeQtyRow[];
+}
