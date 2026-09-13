@@ -28,8 +28,9 @@ defineProps<{ form: OrderForm }>();
       </div>
 
       <!-- No. Order (otomatis) & Tanggal Order -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:w-auto">
-        <div>
+      <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:w-auto"> -->
+      <div class="">
+        <div v-if="false">
           <label class="block text-xs font-semibold text-gray-600 mb-1"
             >No. Order</label
           >
