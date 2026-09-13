@@ -27,18 +27,18 @@ defineProps<{ form: OrderForm }>();
         </div>
       </div>
 
-      <!-- No. Order & Tanggal Order -->
+      <!-- No. Order (otomatis) & Tanggal Order -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:w-auto">
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1"
             >No. Order</label
           >
-          <input
-            v-model="form.noOrder"
-            type="text"
-            placeholder="mis. PS-0001"
-            class="w-full sm:w-48 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-          />
+          <div
+            class="w-full sm:w-48 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-700 flex items-center gap-1.5"
+          >
+            <font-awesome-icon icon="hashtag" class="text-brand-500 text-xs" />
+            <span>{{ form.noOrder || "Isi nama customer dulu" }}</span>
+          </div>
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1">

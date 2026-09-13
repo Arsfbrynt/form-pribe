@@ -13,7 +13,6 @@ const props = defineProps<{
   columnTotalsFor: (rows: SizeQtyRow[]) => Record<string, number>;
   grandTotal: number;
   estimasiSelesai: string;
-  noOrderDisplay: string;
 }>();
 
 const mockupPreviewUrl = ref<string | null>(null);
@@ -77,7 +76,7 @@ function pageIds(): string[] {
 async function handleDownload() {
   const ids = pageIds();
   const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  const filename = `Form-Pesanan-${props.noOrderDisplay || "PRIBE-STUDIO"}.pdf`;
+  const filename = `Form-Pesanan-${props.form.noOrder || "PRIBE-STUDIO"}.pdf`;
 
   let addedFirstPage = false;
   for (const id of ids) {
@@ -231,9 +230,7 @@ function isCustomValue(selected: string | null | undefined) {
                 </div>
                 <div class="order-meta">
                   <p class="meta-label">No. Order</p>
-                  <p class="meta-val mb-1">
-                    {{ displayValue(noOrderDisplay) }}
-                  </p>
+                  <p class="meta-val mb-1">{{ displayValue(form.noOrder) }}</p>
                   <div class="flex gap-2 justify-end">
                     <div class="p-1.5 border rounded-lg">
                       <p class="meta-label">Tanggal Order</p>
@@ -580,9 +577,7 @@ function isCustomValue(selected: string | null | undefined) {
                 </div>
                 <div class="order-meta">
                   <p class="meta-label">No. Order</p>
-                  <p class="meta-val mb-1">
-                    {{ displayValue(noOrderDisplay) }}
-                  </p>
+                  <p class="meta-val mb-1">{{ displayValue(form.noOrder) }}</p>
                   <div class="flex gap-2 justify-end">
                     <div class="p-1.5 border rounded-lg">
                       <p class="meta-label">Tanggal Order</p>
@@ -913,7 +908,6 @@ function isCustomValue(selected: string | null | undefined) {
   max-height: none;
   width: 100%;
   height: 100%;
-  max-height: 755px;
   object-fit: contain;
 }
 

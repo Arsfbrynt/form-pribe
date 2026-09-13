@@ -24,7 +24,6 @@ const {
   removeRincianGroup,
   estimasiSelesai,
   MAX_RINCIAN_GROUPS,
-  noOrderDisplay,
 } = createOrderForm();
 
 const { progress, isDone, preload } = useAssetPreloader([logoUrl], 1500);
@@ -85,7 +84,6 @@ onMounted(() => {
       :column-totals-for="columnTotalsFor"
       :grand-total="grandTotal"
       :estimasi-selesai="estimasiSelesai"
-      :no-order-display="noOrderDisplay"
       @close="previewOpen = false"
     />
   </div>

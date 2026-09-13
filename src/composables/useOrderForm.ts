@@ -1,15 +1,29 @@
-import { reactive, computed } from "vue";
+import { reactive, computed, watch } from "vue";
 import type { OrderForm, RincianUkuranGroup, SizeQtyRow } from "../types/order";
 import { SIZE_ROWS } from "../types/order";
 import { addDaysFormatted } from "../utils/date";
 
 export const MAX_RINCIAN_GROUPS = 2;
 
-/** Ambil huruf awal dari kata pertama nama customer, dibersihkan dari tanda baca. Contoh: "M. Andy" -> "M", "Budi" -> "BUDI" */
+const ORDER_SEQ_STORAGE_KEY = "pribe-studio-order-seq";
+const ORDER_SEQ_PAD = 4; // Budy-0001 s/d Budy-9999
+const ORDER_SEQ_MAX = 9999;
+
+/** Ambil kata pertama nama customer, dibersihkan dari tanda baca. Contoh: "Budy Santoso" -> "Budy" */
 function extractPrefix(nama: string): string {
   const firstWord = (nama || "").trim().split(/\s+/)[0] || "";
-  const letters = firstWord.replace(/[^A-Za-z]/g, "");
-  return letters;
+  return firstWord.replace(/[^A-Za-z0-9]/g, "");
+}
+
+/** Ambil & naikkan nomor urut order dari localStorage (persist antar sesi/browser). Wrap balik ke 1 setelah 9999. */
+function nextOrderSeq(): number {
+  if (typeof window === "undefined" || !window.localStorage) return 1;
+  const current = Number(
+    window.localStorage.getItem(ORDER_SEQ_STORAGE_KEY) || "0",
+  );
+  const next = current >= ORDER_SEQ_MAX ? 1 : current + 1;
+  window.localStorage.setItem(ORDER_SEQ_STORAGE_KEY, String(next));
+  return next;
 }
 
 function emptySizeRows(): SizeQtyRow[] {
@@ -119,14 +133,22 @@ export function createOrderForm() {
     () => form.detailPesanan.jenisSablon === "Plastisol",
   );
 
-  // ===== Nomor order tampil: {AwalanNama}-{noOrder yang diketik user} =====
-  // form.noOrder tetap raw input angka/teks yang diketik user (mis. "201920").
-  // noOrderDisplay dipakai untuk ditampilkan/di-print, hasilnya "Budi-201920".
-  const noOrderDisplay = computed(() => {
-    const prefix = extractPrefix(form.customer.namaCustomer);
-    if (!form.noOrder) return prefix || "—";
-    return prefix ? `${prefix}-${form.noOrder}` : form.noOrder;
-  });
+  // ===== Nomor order full otomatis: {Nama}-{urutan} contoh "Budy-0001" =====
+  // Nomor urut di-reserve sekali per sesi form (persist di localStorage),
+  // lalu digabung otomatis tiap kali nama customer diketik/diubah. User
+  // tidak perlu input nomor order manual sama sekali.
+  const orderSeq = nextOrderSeq();
+
+  watch(
+    () => form.customer.namaCustomer,
+    (nama) => {
+      const prefix = extractPrefix(nama);
+      form.noOrder = prefix
+        ? `${prefix}-${String(orderSeq).padStart(ORDER_SEQ_PAD, "0")}`
+        : "";
+    },
+    { immediate: true },
+  );
 
   // Total per baris (semua kolom model dijumlah)
   const rowTotal = (row: SizeQtyRow) =>
@@ -169,7 +191,6 @@ export function createOrderForm() {
     removeRincianGroup,
     estimasiSelesai,
     MAX_RINCIAN_GROUPS,
-    noOrderDisplay,
   };
 }
 
