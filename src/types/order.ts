@@ -25,14 +25,15 @@ export const FILE_DESAIN_OPTIONS = [
 export type FileDesain = (typeof FILE_DESAIN_OPTIONS)[number];
 
 export const SIZE_ROWS = [
+  "XS",
   "S",
   "M",
   "L",
   "XL",
   "XXL",
   "XXXL",
-  "4XL",
-  "5XL",
+  // "4XL",
+  // "5XL",
 ] as const;
 export type SizeRow = (typeof SIZE_ROWS)[number];
 

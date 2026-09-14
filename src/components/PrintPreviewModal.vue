@@ -370,8 +370,13 @@ function isCustomValue(selected: string | null | undefined) {
                 class="mb-4"
               >
                 <div class="section-banner">
-                  <span>{{ groupLabel(idx) }}</span> RINCIAN UKURAN &amp;
-                  JUMLAH{{ group.warnaKaos ? ` — ${group.warnaKaos}` : "" }}
+                  <span :class="form.rincianUkuran.length > 1 && '!w-5'">{{
+                    groupLabel(idx)
+                  }}</span>
+                  RINCIAN UKURAN &amp; JUMLAH
+                </div>
+                <div v-if="group.warnaKaos" class="group-warna-note">
+                  Warna: <b>{{ group.warnaKaos }}</b>
                 </div>
                 <div class="size-table-wrapper">
                   <table class="size-input-table !w-full !min-w-[500px]">
@@ -830,6 +835,18 @@ function isCustomValue(selected: string | null | undefined) {
   white-space: nowrap;
   span {
     @apply bg-white text-brand-500 rounded-sm w-3 h-3 flex items-center justify-center text-[10px];
+  }
+}
+
+/* Badge nama warna kaos, ditaruh di bawah section-banner (bukan nempel di
+   dalam banner merah) biar kontras teksnya jelas & gak samar pas dicetak. */
+.group-warna-note {
+  @apply px-3 py-1;
+  font-size: 10.5px;
+  border-top: none;
+
+  b {
+    @apply font-semibold capitalize;
   }
 }
 
