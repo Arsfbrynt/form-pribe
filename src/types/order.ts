@@ -53,13 +53,14 @@ export type TypeBahan = (typeof TYPE_BAHAN)[number];
 
 /** One "model" column in the size x model qty grid (mirrors the reference sheet). */
 export interface SizeQtyRow {
-  size: SizeRow;
+  id: string;
+  size: string;
+  isCustom?: boolean;
   lenganPendek: number;
   lenganCustom: number;
   lenganPanjang: number;
   anakLenganPendek: number;
   anakLengan34?: number;
-  isCustom?: boolean;
   anakLenganPanjang: number;
 }
 

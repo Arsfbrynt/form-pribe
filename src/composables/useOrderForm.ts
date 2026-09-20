@@ -4,7 +4,7 @@ import { SIZE_ROWS } from "../types/order";
 import { addDaysFormatted } from "../utils/date";
 
 export const MAX_RINCIAN_GROUPS = 2;
-export const MAX_CUSTOM_SIZE_ROWS = 2; // maksimal baris ukuran tambahan per tabel
+export const MAX_CUSTOM_SIZE_ROWS = 3; // maksimal baris ukuran tambahan per tabel
 
 const ORDER_SEQ_STORAGE_KEY = "pribe-studio-order-seq";
 const ORDER_SEQ_PAD = 4; // Budy-0001 s/d Budy-9999

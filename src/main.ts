@@ -22,6 +22,7 @@ import {
   faCircleCheck,
   faGlobe,
   faPhone,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -41,6 +42,7 @@ library.add(
   faCircleCheck,
   faGlobe,
   faPhone,
+  faXmark,
 );
 
 const app = createApp(App);
