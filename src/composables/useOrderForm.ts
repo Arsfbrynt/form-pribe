@@ -4,6 +4,7 @@ import { SIZE_ROWS } from "../types/order";
 import { addDaysFormatted } from "../utils/date";
 
 export const MAX_RINCIAN_GROUPS = 2;
+export const MAX_CUSTOM_SIZE_ROWS = 2; // maksimal baris ukuran tambahan per tabel
 
 const ORDER_SEQ_STORAGE_KEY = "pribe-studio-order-seq";
 const ORDER_SEQ_PAD = 4; // Budy-0001 s/d Budy-9999
@@ -28,13 +29,29 @@ function nextOrderSeq(): number {
 
 function emptySizeRows(): SizeQtyRow[] {
   return SIZE_ROWS.map((size) => ({
+    id: size,
     size,
+    isCustom: false,
     lenganPendek: 0,
     lenganCustom: 0,
     lenganPanjang: 0,
     anakLenganPendek: 0,
     anakLenganPanjang: 0,
   }));
+}
+
+/** Baris ukuran tambahan (custom) — label-nya kosong & bisa diketik bebas oleh user. */
+function createCustomSizeRow(): SizeQtyRow {
+  return {
+    id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    size: "",
+    isCustom: true,
+    lenganPendek: 0,
+    lenganCustom: 0,
+    lenganPanjang: 0,
+    anakLenganPendek: 0,
+    anakLenganPanjang: 0,
+  };
 }
 
 function createRincianGroup(warnaKaos = ""): RincianUkuranGroup {
@@ -177,6 +194,18 @@ export function createOrderForm() {
     if (idx !== -1) form.rincianUkuran.splice(idx, 1);
   }
 
+  // Baris ukuran custom (tambahan) per tabel, taruh paling bawah (sebelum TOTAL), maks MAX_CUSTOM_SIZE_ROWS
+  function addCustomSizeRow(group: RincianUkuranGroup) {
+    const customCount = group.rows.filter((r) => r.isCustom).length;
+    if (customCount >= MAX_CUSTOM_SIZE_ROWS) return;
+    group.rows.push(createCustomSizeRow());
+  }
+
+  function removeCustomSizeRow(group: RincianUkuranGroup, rowId: string) {
+    const idx = group.rows.findIndex((r) => r.id === rowId);
+    if (idx !== -1) group.rows.splice(idx, 1);
+  }
+
   const estimasiSelesai = computed(() =>
     addDaysFormatted(form.tanggalOrder, 7),
   );
@@ -189,8 +218,11 @@ export function createOrderForm() {
     columnTotalsFor,
     addRincianGroup,
     removeRincianGroup,
+    addCustomSizeRow,
+    removeCustomSizeRow,
     estimasiSelesai,
     MAX_RINCIAN_GROUPS,
+    MAX_CUSTOM_SIZE_ROWS,
   };
 }
 

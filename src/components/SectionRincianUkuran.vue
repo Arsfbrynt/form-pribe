@@ -8,6 +8,9 @@ const props = defineProps<{
   addGroup: () => void;
   removeGroup: (id: string) => void;
   maxGroups: number;
+  addCustomRow: (group: RincianUkuranGroup) => void;
+  removeCustomRow: (group: RincianUkuranGroup, rowId: string) => void;
+  maxCustomRows: number;
 }>();
 
 const cols: {
@@ -28,6 +31,10 @@ function groupTotal(group: RincianUkuranGroup) {
 
 function grandTotalAll() {
   return props.form.rincianUkuran.reduce((sum, g) => sum + groupTotal(g), 0);
+}
+
+function customRowCount(group: RincianUkuranGroup) {
+  return group.rows.filter((r) => r.isCustom).length;
 }
 </script>
 
@@ -100,10 +107,26 @@ function grandTotalAll() {
             </thead>
 
             <tbody>
-              <tr v-for="row in group.rows" :key="row.size" class="table-row">
+              <tr v-for="row in group.rows" :key="row.id" class="table-row">
                 <td class="td-size-label">
-                  <div>
+                  <div v-if="!row.isCustom">
                     {{ row.size }}
+                  </div>
+                  <div v-else class="custom-size-cell">
+                    <input
+                      v-model="row.size"
+                      type="text"
+                      placeholder="Ukuran"
+                      class="custom-size-input"
+                    />
+                    <button
+                      type="button"
+                      class="btn-remove-row"
+                      title="Hapus baris ini"
+                      @click="removeCustomRow(group, row.id)"
+                    >
+                      <font-awesome-icon icon="xmark" />
+                    </button>
                   </div>
                 </td>
                 <td v-for="c in cols" :key="c.key" class="td-input-cell">
@@ -145,6 +168,15 @@ function grandTotalAll() {
             </tfoot>
           </table>
         </div>
+
+        <button
+          v-if="customRowCount(group) < maxCustomRows"
+          type="button"
+          class="btn-add-row"
+          @click="addCustomRow(group)"
+        >
+          <font-awesome-icon icon="plus" /> Tambah Baris Ukuran
+        </button>
       </div>
 
       <button
@@ -224,6 +256,10 @@ function grandTotalAll() {
   @apply w-full inline-flex items-center justify-center gap-2 text-sm font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 border border-dashed border-brand-300 rounded-lg px-3 py-2 transition-colors;
 }
 
+.btn-add-row {
+  @apply mt-2 inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 border border-dashed border-brand-300 rounded-md px-2.5 py-1.5 transition-colors;
+}
+
 /* Table Base */
 .size-input-table {
   @apply w-full border-collapse text-sm min-w-[720px];
@@ -248,6 +284,19 @@ function grandTotalAll() {
   &.is-anak {
     @apply bg-brand-100;
   }
+}
+
+/* Custom size row (label bisa diketik + tombol hapus) */
+.custom-size-cell {
+  @apply flex items-center gap-1;
+}
+
+.custom-size-input {
+  @apply w-16 rounded-md border border-brand-300 bg-brand-50 px-1.5 py-1 text-xs text-center text-gray-800 focus:outline-none focus:ring-1 focus:ring-brand-500;
+}
+
+.btn-remove-row {
+  @apply inline-flex items-center justify-center w-5 h-5 rounded text-red-500 hover:bg-red-50 transition-colors shrink-0;
 }
 
 /* Summary Box Below Table */

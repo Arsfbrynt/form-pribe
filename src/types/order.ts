@@ -59,6 +59,7 @@ export interface SizeQtyRow {
   lenganPanjang: number;
   anakLenganPendek: number;
   anakLengan34?: number;
+  isCustom?: boolean;
   anakLenganPanjang: number;
 }
 

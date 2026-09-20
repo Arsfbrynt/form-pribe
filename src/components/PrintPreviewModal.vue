@@ -376,7 +376,7 @@ function isCustomValue(selected: string | null | undefined) {
                   RINCIAN UKURAN &amp; JUMLAH
                 </div>
                 <div v-if="group.warnaKaos" class="group-warna-note">
-                  Warna: <b>{{ group.warnaKaos }}</b>
+                  Warna Kaos: <b>{{ group.warnaKaos }}</b>
                 </div>
                 <div class="size-table-wrapper">
                   <table class="size-input-table !w-full !min-w-[500px]">
@@ -413,7 +413,9 @@ function isCustomValue(selected: string | null | undefined) {
                         :key="row.size"
                         class="table-row"
                       >
-                        <td class="td-cell font-semibold">{{ row.size }}</td>
+                        <td class="td-cell font-semibold">
+                          {{ row.size || "-" }}
+                        </td>
                         <td
                           v-for="c in cols"
                           :key="c.key"
@@ -841,12 +843,12 @@ function isCustomValue(selected: string | null | undefined) {
 /* Badge nama warna kaos, ditaruh di bawah section-banner (bukan nempel di
    dalam banner merah) biar kontras teksnya jelas & gak samar pas dicetak. */
 .group-warna-note {
-  @apply px-3 py-1;
+  @apply bg-gray-100 border border-gray-300 text-gray-800 font-semibold px-3 py-1;
   font-size: 10.5px;
   border-top: none;
 
   b {
-    @apply font-semibold capitalize;
+    @apply text-brand-700;
   }
 }
 

@@ -22,8 +22,11 @@ const {
   columnTotalsFor,
   addRincianGroup,
   removeRincianGroup,
+  addCustomSizeRow,
+  removeCustomSizeRow,
   estimasiSelesai,
   MAX_RINCIAN_GROUPS,
+  MAX_CUSTOM_SIZE_ROWS,
 } = createOrderForm();
 
 const { progress, isDone, preload } = useAssetPreloader([logoUrl], 1500);
@@ -50,7 +53,7 @@ onMounted(() => {
           <SectionDetailPesanan :form="form" />
         </div>
 
-        <!-- Section 3 (full width) — sekarang bisa 1-2 tabel -->
+        <!-- Section 3 (full width) — sekarang bisa 1-2 tabel + baris ukuran custom -->
         <SectionRincianUkuran
           :form="form"
           :row-total="rowTotal"
@@ -58,6 +61,9 @@ onMounted(() => {
           :add-group="addRincianGroup"
           :remove-group="removeRincianGroup"
           :max-groups="MAX_RINCIAN_GROUPS"
+          :add-custom-row="addCustomSizeRow"
+          :remove-custom-row="removeCustomSizeRow"
+          :max-custom-rows="MAX_CUSTOM_SIZE_ROWS"
         />
 
         <!-- Section 4 & 5 -->
